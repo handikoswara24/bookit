@@ -1,0 +1,1 @@
+export default (func: (arg0: any, arg1: any, arg2: any) => any) => (req: any, res: any, next: any) => Promise.resolve(func(req, res, next)).catch(next)
