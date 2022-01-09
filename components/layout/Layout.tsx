@@ -4,7 +4,10 @@ import Head from "next/head";
 import Header from "./Header";
 import Footer from "./Footer";
 
-const Layout = ({children, title = "Best Book Hotel for your Holiday"} : any) => {
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const Layout = ({ children, title = "Best Book Hotel for your Holiday" }: any) => {
     return (
         <div>
             <Head>
@@ -14,7 +17,9 @@ const Layout = ({children, title = "Best Book Hotel for your Holiday"} : any) =>
             </Head>
 
             <Header />
+
             {children}
+            <ToastContainer position="bottom-right" theme="colored" />
             <Footer />
         </div>
     )
