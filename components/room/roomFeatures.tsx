@@ -31,7 +31,7 @@ const RoomFeatures = ({ room }: any) => {
 
             <div className='room-feature'>
                 <i className={room.petsAllowed ? "fa fa-check text-success" : "fa fa-times text-danger"} aria-hidden="true"></i>
-                <p>Pets Allowes</p>
+                <p>Pets Allowed</p>
             </div>
 
             <div className='room-feature'>

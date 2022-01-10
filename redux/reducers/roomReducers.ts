@@ -5,7 +5,7 @@ export const allRoomsReducer = (state: any = { rooms: [] }, action: any) => {
         case ALL_ROOMS_SUCCESS:
             return {
                 roomsCount: action.payload.roomsCount,
-                resPerPage: action.payload.roomsCount,
+                resPerPage: action.payload.resPerPage,
                 filteredRoomsCount: action.payload.filteredRoomsCount,
                 rooms: action.payload.rooms
             }

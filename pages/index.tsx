@@ -15,6 +15,6 @@ const Index: NextPage = () => {
 export default Index;
 
 //@ts-ignore
-export const getServerSideProps = wrapper.getServerSideProps(store => async ({ req }) => {
-  await store.dispatch(getRooms(req))
+export const getServerSideProps = wrapper.getServerSideProps(store => async ({ req, query }: any) => {
+  await store.dispatch(getRooms(req, query.page))
 });
