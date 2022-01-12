@@ -13,7 +13,7 @@ const Home = () => {
 
     const { rooms, resPerPage, roomsCount, filteredRoomsCount, error } = useSelector((state: any) => state.allRooms);
 
-    let { page = 1, location } = router.query;
+    let { page = 1, location, guests, category } = router.query;
     page = Number(page);
 
     useEffect(() => {
@@ -24,11 +24,23 @@ const Home = () => {
     }, [])
 
     const handlePagination = (pageNumber: any) => {
-        router.push(`/?page=${pageNumber}`)
+        let link = `/?page=${pageNumber}`;
+        if (location) {
+            link += `&location=${location}`;
+        }
+
+        if (guests) {
+            link += `&guests=${guests}`
+        }
+
+        if (category) {
+            link += `&category=${category}`;
+        }
+        router.push(link);
     }
 
     let count = roomsCount;
-    if (location) {
+    if (location || guests || category) {
         count = filteredRoomsCount;
     }
 
@@ -44,7 +56,7 @@ const Home = () => {
                 <div className="row">
                     {rooms.length === 0 ?
                         (<div>
-                            <div className="alert alert-danger">
+                            <div className="alert alert-danger mt-5 w-100">
                                 <b>No Rooms.</b>
                             </div>
                         </div>) :
@@ -62,7 +74,7 @@ const Home = () => {
                     <Pagination
                         activePage={page}
                         itemsCountPerPage={resPerPage}
-                        totalItemsCount={roomsCount}
+                        totalItemsCount={count}
                         nextPageText={"Next"}
                         onChange={handlePagination}
                         prevPageText={"Prev"}
