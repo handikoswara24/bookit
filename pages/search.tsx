@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Layout from '../components/layout/Layout'
 import Search from '../components/Search'
 
-const Index: NextPage = () => {
+const SearchPage: NextPage = () => {
     return (
         <Layout title="Search Rooms">
             <Search />
@@ -10,4 +10,4 @@ const Index: NextPage = () => {
     )
 }
 
-export default Index;
+export default SearchPage;
