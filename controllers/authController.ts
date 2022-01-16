@@ -1,8 +1,6 @@
-import { NextApiHandler, NextApiRequest, NextApiResponse } from "next"
+import { NextApiRequest, NextApiResponse } from "next"
 import User from "../models/user";
-import ErrorHandler from "../utils/errorHandler";
 import catchAsyncErrors from "../middlewares/catchAsyncErrors";
-import APIFeatures from "../utils/apiFeatures";
 import cloudinary from "cloudinary";
 
 cloudinary.v2.config({
