@@ -3,17 +3,30 @@ import User from "../models/user";
 import ErrorHandler from "../utils/errorHandler";
 import catchAsyncErrors from "../middlewares/catchAsyncErrors";
 import APIFeatures from "../utils/apiFeatures";
+import cloudinary from "cloudinary";
+
+cloudinary.v2.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+})
 
 const registerUser = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
-    const {name, email, password} : any = req.body;
+    const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: "bookit/avatars",
+        width: "150",
+        crop: "scale"
+    })
+
+    const { name, email, password }: any = req.body;
 
     const user = await User.create({
         name,
-        email, 
+        email,
         password,
         avatar: {
-            public_id: "PUBLIC_ID",
-            url: "URL"
+            public_id: result.public_id,
+            url: result.url
         }
     })
 
