@@ -72,7 +72,7 @@ const Login = () => {
                             {loading ? <ButtonLoader /> : "LOGIN"}
                         </button>
                         <div className="d-flex flex-row-reverse">
-                            <a href="#" >New User?</a>
+                            <Link href="/register"><a>New User?</a></Link>
                         </div>
                     </form>
                 </div>
