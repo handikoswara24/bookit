@@ -40,15 +40,18 @@ export default NextAuth({
     ],
     callbacks: {
         //@ts-ignore
-        jwt: async (token, user) => {
-            user && (token.user = user)
+        async jwt({token, user}){
+            if (user) {
+                console.log(user)
+                token.user = user
+            }
             return Promise.resolve(token)
         },
-        //@ts-ignore
-        session: async (session, user) => {
-            session.user = user.user;
 
-            return Promise.resolve(session);
+        session: async({session, token}) => {
+            //@ts-ignore
+            session.user = token.user
+            return Promise.resolve(session)
         }
     }
 })
