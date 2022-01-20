@@ -72,8 +72,8 @@ const Register = () => {
                     <form className="shadow-lg" onSubmit={submitHandler}>
                         <h1 className="mb-3">Join Us</h1>
 
-                        <div className="form-group">
-                            <label htmlFor="name_field">Full Name</label>
+                        <div className="mb-3">
+                            <label htmlFor="name_field" className="form-label">Full Name</label>
                             <input
                                 type="text"
                                 id="name_field"
@@ -84,8 +84,8 @@ const Register = () => {
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="email_field">Email</label>
+                        <div className="mb-3">
+                            <label htmlFor="email_field" className="form-label">Email</label>
                             <input
                                 type="email"
                                 id="email_field"
@@ -96,8 +96,8 @@ const Register = () => {
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="password_field">Password</label>
+                        <div className="mb-3">
+                            <label htmlFor="password_field" className="form-label">Password</label>
                             <input
                                 type="password"
                                 id="password_field"
@@ -108,8 +108,8 @@ const Register = () => {
                             />
                         </div>
 
-                        <div className='form-group'>
-                            <label htmlFor='avatar_upload'>Avatar</label>
+                        <div className='mb-3'>
+                            <label htmlFor='avatar_upload' className="form-label">Avatar</label>
                             <div className='d-flex align-items-center'>
                                 <div>
                                     <figure className='avatar mr-3 item-rtl'>

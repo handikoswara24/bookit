@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CLEAR_ERRORS, LOAD_USER_FAIL, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, REGISTER_USER_FAIL, REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS } from "../constants/userConstant";
+import { CLEAR_ERRORS, LOAD_USER_FAIL, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, REGISTER_USER_FAIL, REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS, UPDATE_PROFILE_FAIL, UPDATE_PROFILE_REQUEST, UPDATE_PROFILE_SUCCESS } from "../constants/userConstant";
 
 export const registerUser = (userData: any) => async (dispatch: any) => {
     try {
@@ -28,6 +28,24 @@ export const loadUser = () => async (dispatch: any) => {
         dispatch( {type: LOAD_USER_SUCCESS, payload: data.user} );
     } catch (error : any) {
         dispatch({type: LOAD_USER_FAIL, payload: error.response.data.message});
+    }
+} 
+
+export const updateProfile = (userData: any) => async (dispatch: any) => {
+    try {
+        dispatch({type: UPDATE_PROFILE_REQUEST});
+
+        const config = {
+            headers: {
+                "Content-type": "application/json"
+            }
+        };
+
+        const { data } : any = await axios.put("/api/me/update", userData, config);
+
+        dispatch( {type: UPDATE_PROFILE_SUCCESS, payload: data.success} );
+    } catch (error : any) {
+        dispatch({type: UPDATE_PROFILE_FAIL, payload: error.response.data.message});
     }
 } 
 
