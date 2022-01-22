@@ -59,7 +59,7 @@ const Login = () => {
                             />
                         </div>
                         <div className="d-flex flex-row-reverse">
-                            <a href="#" className="mb-4">Forgot Password?</a>
+                            <Link href="/password/forgot"><a className="mb-4">Forgot Password?</a></Link>
                         </div>
 
 

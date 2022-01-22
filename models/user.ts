@@ -44,14 +44,24 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function (req, res, next) {
     //@ts-ignore
     if(!this.isModified("password")){
-        next()
+        next();
     }
     //@ts-ignore
     this.password = await bcrypt.hash(this.password, 10);
+    next();
 })
 
 userSchema.methods.comparePassword = async function(enteredPassword){
     return await bcrypt.compare(enteredPassword, this.password);
+}
+
+userSchema.methods.getResetPasswordToken = function(){
+    const resetToken = crypto.randomBytes(20).toString("hex");
+
+    this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    this.resetPasswordExpire = Date.now() + 30 * 60 * 1000;
+
+    return resetToken;
 }
 
 export default mongoose.models.User || mongoose.model("User", userSchema);

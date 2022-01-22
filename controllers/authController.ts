@@ -2,6 +2,9 @@ import { NextApiRequest, NextApiResponse } from "next"
 import User from "../models/user";
 import catchAsyncErrors from "../middlewares/catchAsyncErrors";
 import cloudinary from "cloudinary";
+import ErrorHandler from "../utils/errorHandler";
+import absoluteUrl from "next-absolute-url";
+import sendEmail from "../utils/sendEmail";
 
 cloudinary.v2.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -78,8 +81,49 @@ const updateProfile = catchAsyncErrors(async (req: any, res: NextApiResponse) =>
     })
 })
 
+const forgotPassword = catchAsyncErrors(async (req: any, res: NextApiResponse, next : any) => {
+    const user = await User.findOne({email : req.body.email});
+
+    if(!user){
+        return next(new ErrorHandler("User not found with this email", 404));
+    }
+
+    const resetToken = user.getResetPasswordToken();
+
+    await user.save({validateBeforeSave : false});
+
+    const {origin} = absoluteUrl(req);
+
+    const resetUrl = `${origin}/password/reset/${resetToken}`;
+
+    const message = `Your password reset url is as follow \n\n ${resetUrl} \n
+    If you have not requested this email, then ignore it`;
+
+    try {
+        await sendEmail({
+            email : user.email,
+            subject : "Bookit Password Recovery",
+            message
+        });
+
+        res.status(200).json({
+            success: true,
+            message: `Email sent to : ${user.email}`
+        })
+    } catch (error : any) {
+        user.reserPasswordToken = undefined;
+        user.resetPasswordExpired = undefined;
+
+        await user.save({validateBeforeSave : false});
+
+        return next(new ErrorHandler(error.message, 500));
+    }
+
+})
+
 export {
     registerUser,
     currentUserProfile,
-    updateProfile
+    updateProfile,
+    forgotPassword
 }
