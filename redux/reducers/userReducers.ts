@@ -7,16 +7,37 @@ export const authReducer = (state: any = { user: null }, action: any) => {
                 loading: true
             }
         }
-        case LOAD_USER_REQUEST : {
-            return {
-                loading: true,
-                isAuthenticated: false
-            }
-        }
         case REGISTER_USER_SUCCESS: {
             return {
                 loading: false,
                 success: true
+            }
+        }
+
+        case REGISTER_USER_FAIL: {
+            return {
+                loading: false,
+                error: action.payload
+            }
+        }
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+        default: {
+            return state;
+        }
+    }
+}
+
+export const loadUserReducer = (state: any = { user: null, loading: true }, action: any) => {
+    switch (action.type) {
+        case LOAD_USER_REQUEST: {
+            return {
+                loading: true,
+                isAuthenticated: false
             }
         }
         case LOAD_USER_SUCCESS: {
@@ -24,12 +45,6 @@ export const authReducer = (state: any = { user: null }, action: any) => {
                 loading: false,
                 isAuthenticated: true,
                 user: action.payload
-            }
-        }
-        case REGISTER_USER_FAIL: {
-            return {
-                loading: false,
-                error: action.payload
             }
         }
 
@@ -51,14 +66,14 @@ export const authReducer = (state: any = { user: null }, action: any) => {
     }
 }
 
-export const userReducer = (state: any = { }, action: any) => {
+export const userReducer = (state: any = {}, action: any) => {
     switch (action.type) {
         case UPDATE_PROFILE_REQUEST: {
             return {
                 loading: true
             }
         }
-        
+
         case UPDATE_PROFILE_SUCCESS: {
             return {
                 loading: false,
@@ -72,7 +87,7 @@ export const userReducer = (state: any = { }, action: any) => {
                 isUpdated: false
             }
         }
-        
+
         case UPDATE_PROFILE_FAIL: {
             return {
                 loading: false,
@@ -91,35 +106,35 @@ export const userReducer = (state: any = { }, action: any) => {
     }
 }
 
-export const forgotPasswordReducer = (state: any = { }, action: any) => {
+export const forgotPasswordReducer = (state: any = {}, action: any) => {
     switch (action.type) {
         case FORGOT_PASSWORD_REQUEST:
-        case RESET_PASSWORD_REQUEST : {
+        case RESET_PASSWORD_REQUEST: {
             return {
                 loading: true
             }
         }
-        
+
         case FORGOT_PASSWORD_SUCCESS:
-        {
-            return {
-                loading: false,
-                message: action.payload
+            {
+                return {
+                    loading: false,
+                    message: action.payload
+                }
             }
-        }
         case RESET_PASSWORD_SUCCESS:
-        {
-            return {
-                loading: false,
-                success: action.payload
+            {
+                return {
+                    loading: false,
+                    success: action.payload
+                }
             }
-        }
 
         case FORGOT_PASSWORD_FAIL:
-        case RESET_PASSWORD_FAIL :  {
+        case RESET_PASSWORD_FAIL: {
             return {
                 loading: false,
-                error:  action.payload
+                error: action.payload
             }
         }
 

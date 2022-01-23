@@ -12,25 +12,25 @@ export default NextAuth({
     providers: [
         //@ts-ignore
         Credentials({
-            async authorize(credentials : any) {
+            async authorize(credentials: any) {
                 dbConnect();
 
-                const {email, password} = credentials;
+                const { email, password } = credentials;
 
-                if(!email || !password){
+                if (!email || !password) {
                     throw new Error("Please enter email or password");
                 }
 
-                const user = await User.findOne({email}).select("+password");
+                const user = await User.findOne({ email }).select("+password");
 
-                if(!user){
+                if (!user) {
                     throw new Error("Invalid Email or Password");
                 }
 
                 //@ts-ignore
                 const isPasswordMatched = await user.comparePassword(password);
 
-                if(!isPasswordMatched){
+                if (!isPasswordMatched) {
                     throw new Error("Invalid Email or Password");
                 }
 
@@ -40,15 +40,14 @@ export default NextAuth({
     ],
     callbacks: {
         //@ts-ignore
-        async jwt({token, user}){
+        async jwt({ token, user }) {
             if (user) {
-                console.log(user)
                 token.user = user
             }
             return Promise.resolve(token)
         },
 
-        session: async({session, token}) => {
+        session: async ({ session, token }) => {
             //@ts-ignore
             session.user = token.user
             return Promise.resolve(session)
