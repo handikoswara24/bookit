@@ -10,7 +10,9 @@ const Header = () => {
     const { user, loading } = useSelector((state: any) => state.auth);
 
     useEffect(() => {
-        dispatch(loadUser());
+        if (!user) {
+            dispatch(loadUser());
+        }
     }, []);
 
     const logoutHandler = () => {

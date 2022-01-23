@@ -5,6 +5,7 @@ import cloudinary from "cloudinary";
 import ErrorHandler from "../utils/errorHandler";
 import absoluteUrl from "next-absolute-url";
 import sendEmail from "../utils/sendEmail";
+import crypto from "crypto";
 
 cloudinary.v2.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -111,7 +112,7 @@ const forgotPassword = catchAsyncErrors(async (req: any, res: NextApiResponse, n
             message: `Email sent to : ${user.email}`
         })
     } catch (error : any) {
-        user.reserPasswordToken = undefined;
+        user.resetPasswordToken = undefined;
         user.resetPasswordExpired = undefined;
 
         await user.save({validateBeforeSave : false});
@@ -121,9 +122,42 @@ const forgotPassword = catchAsyncErrors(async (req: any, res: NextApiResponse, n
 
 })
 
+const resetPassword = catchAsyncErrors(async (req: any, res: NextApiResponse, next : any) => {
+
+    const resetPasswordToken = crypto.createHash("sha256").update(req.query.token).digest("hex");
+
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire : {
+            $gt: Date.now()
+        }
+    });
+
+    if(!user){
+        return next(new ErrorHandler("Password reset token is invalid or has been expired", 400));
+    }
+
+    if(req.body.password !== req.body.confirmPassword){
+        return next(new ErrorHandler("Password does not match", 400));
+    }
+
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    res.status(200).json({
+        success: true,
+        message: "Password updated successfully"
+    })
+
+})
+
 export {
     registerUser,
     currentUserProfile,
     updateProfile,
-    forgotPassword
+    forgotPassword,
+    resetPassword
 }

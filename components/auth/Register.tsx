@@ -29,6 +29,9 @@ const Register = () => {
         }
 
         if (error) {
+            if (error.includes("Login")) {
+                return;
+            }
             toast.error(error);
             dispatch(clearErrors());
         }
