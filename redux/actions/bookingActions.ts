@@ -1,5 +1,6 @@
 import axios from "axios";
-import { BOOK_DATES_FAIL, BOOK_DATES_SUCCESS, CHECK_BOOKING_FAIL, CHECK_BOOKING_REQUEST, CHECK_BOOKING_SUCCESS, CLEAR_ERRORS } from "../constants/bookingConstants";
+import absoluteUrl from "next-absolute-url";
+import { BOOK_DATES_FAIL, BOOK_DATES_SUCCESS, CHECK_BOOKING_FAIL, CHECK_BOOKING_REQUEST, CHECK_BOOKING_SUCCESS, CLEAR_ERRORS, MY_BOOKINGS_FAIL, MY_BOOKINGS_SUCCESS } from "../constants/bookingConstants";
 
 export const checkBooking = (roomId: any, checkInDate: any, checkOutDate: any) => async (dispatch: any) => {
     try {
@@ -22,6 +23,23 @@ export const getBookedDates = (id: any) => async (dispatch: any) => {
         dispatch({ type: BOOK_DATES_SUCCESS, payload: data.bookedDates });
     } catch (error: any) {
         dispatch({ type: BOOK_DATES_FAIL, payload: error.response.data.message });
+    }
+}
+
+export const myBookings = (authCookie : any, req : any) => async (dispatch: any) => {
+    try {
+        const {origin} = absoluteUrl(req)
+
+        const config = {
+            headers: {
+                cookie: authCookie
+            }
+        }
+        const { data }: any = await axios.get(`${origin}/api/bookings/me`, config);
+
+        dispatch({ type: MY_BOOKINGS_SUCCESS, payload: data.bookings });
+    } catch (error: any) {
+        dispatch({ type: MY_BOOKINGS_FAIL, payload: error.response.data.message });
     }
 }
 
