@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+//@ts-ignore
+import timeZone from "mongoose-timezone";
 
 const bookingSchema = new mongoose.Schema({
     room: {
@@ -44,5 +46,7 @@ const bookingSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+bookingSchema.plugin(timeZone);
 
 export default mongoose.models.Booking || mongoose.model("Booking", bookingSchema);

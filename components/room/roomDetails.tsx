@@ -10,7 +10,7 @@ import { clearErrors } from "../../redux/actions/roomActions";
 import RoomFeatures from "./roomFeatures";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { checkBooking } from "../../redux/actions/bookingActions";
+import { checkBooking, getBookedDates } from "../../redux/actions/bookingActions";
 
 const RoomDetails = ({ }: any) => {
     const dispatch = useDispatch();
@@ -20,11 +20,21 @@ const RoomDetails = ({ }: any) => {
     const [daysOfStay, setDaysOfStay] = useState(0);
 
     const router = useRouter();
+
+    const { booked } = useSelector((state: any) => state.bookedDates);
     const { user } = useSelector((state: any) => state.loadUser);
     const { room, error } = useSelector((state: any) => state.roomDetails);
     const { available, loading: bookingLoading } = useSelector((state: any) => state.checkBooking);
 
     const { id } = router.query;
+
+    const excludedDates: any[] = [];
+
+    if (booked) {
+        booked.forEach((element: any) => {
+            excludedDates.push(new Date(element));
+        });
+    }
 
 
     const onChange = (dates: any) => {
@@ -71,11 +81,12 @@ const RoomDetails = ({ }: any) => {
     }
 
     useEffect(() => {
+        dispatch(getBookedDates(id));
         if (error) {
             toast.error(error);
             dispatch(clearErrors());
         }
-    }, [])
+    }, [dispatch, id])
 
     return (
         <>
@@ -125,6 +136,8 @@ const RoomDetails = ({ }: any) => {
                                 startDate={checkInDate}
                                 endDate={checkOutDate}
                                 selectsRange
+                                //@ts-ignore
+                                excludeDates={excludedDates}
                                 inline
                             />
 
