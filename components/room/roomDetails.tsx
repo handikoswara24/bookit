@@ -13,6 +13,7 @@ import axios from "axios";
 import { checkBooking, getBookedDates } from "../../redux/actions/bookingActions";
 import { CHECK_BOOKING_RESET } from "../../redux/constants/bookingConstants";
 import getStripe from "../../utils/getStripe";
+import NewReview from "../review/NewReview";
 
 const RoomDetails = ({ }: any) => {
     const dispatch = useDispatch();
@@ -200,6 +201,7 @@ const RoomDetails = ({ }: any) => {
                     </div>
                 </div>
 
+                <NewReview />
 
                 <div className="reviews w-75">
                     <h3>Reviews:</h3>

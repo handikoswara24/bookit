@@ -66,7 +66,7 @@ export const newReview = (reviewData : any) => async (dispatch: any) => {
 
         dispatch({
             type: NEW_REVIEW_SUCCESS,
-            payload: data.room
+            payload: data.success
         })
     } catch (error: any) {
         dispatch({
