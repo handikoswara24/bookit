@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { clearErrors, newReview } from "../../redux/actions/roomActions";
+import { checkReviewAvailability, clearErrors, newReview } from "../../redux/actions/roomActions";
 import { NEW_REVIEW_RESET } from "../../redux/constants/roomConstant";
 
 const NewReview = () => {
@@ -13,10 +13,15 @@ const NewReview = () => {
     const router = useRouter();
 
     const { error, success } = useSelector((state: any) => state.newReview);
+    const { reviewAvailable } = useSelector((state: any) => state.checkReview);
 
     const { id } = router.query;
 
     useEffect(() => {
+        if (id !== undefined) {
+            dispatch(checkReviewAvailability(id));
+        }
+
         if (error) {
             toast.error(error);
             dispatch(clearErrors());
@@ -26,7 +31,7 @@ const NewReview = () => {
             toast.success("Review is posted.");
             dispatch({ type: NEW_REVIEW_RESET })
         }
-    }, [dispatch, error, success]);
+    }, [dispatch, error, success, id]);
 
     const submitHandler = () => {
         const reviewData = {
@@ -125,11 +130,14 @@ const NewReview = () => {
 
     return (
         <>
-            <button id="review_btn" type="button" className="btn btn-primary mt-4 mb-5" data-toggle="modal" data-target="#ratingModal"
-                onClick={setUserRatings}
-            >
-                Submit Your Review
-            </button>
+            {reviewAvailable && (
+                <button id="review_btn" type="button" className="btn btn-primary mt-4 mb-5" data-toggle="modal" data-target="#ratingModal"
+                    onClick={setUserRatings}
+                >
+                    Submit Your Review
+                </button>
+            )}
+
 
             <div className="modal fade" id="ratingModal" tabIndex={-1} role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
                 <div className="modal-dialog" role="document">

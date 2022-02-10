@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ALL_ROOMS_FAIL, ALL_ROOMS_SUCCESS, CLEAR_ERRORS, NEW_REVIEW_FAIL, NEW_REVIEW_REQUEST, NEW_REVIEW_SUCCESS, ROOM_DETAILS_FAIL, ROOM_DETAILS_SUCCESS } from "../constants/roomConstant";
+import { ALL_ROOMS_FAIL, ALL_ROOMS_SUCCESS, CLEAR_ERRORS, NEW_REVIEW_FAIL, NEW_REVIEW_REQUEST, NEW_REVIEW_SUCCESS, REVIEW_AVAILABILITY_FAIL, REVIEW_AVAILABILITY_REQUEST, REVIEW_AVAILABILITY_SUCCESS, ROOM_DETAILS_FAIL, ROOM_DETAILS_SUCCESS } from "../constants/roomConstant";
 import absoluteUrl from "next-absolute-url";
 // Get all rooms
 export const getRooms = (req: any, currentPage = 1, location ="", guests : any, category : any) => async (dispatch: any) => {
@@ -71,6 +71,25 @@ export const newReview = (reviewData : any) => async (dispatch: any) => {
     } catch (error: any) {
         dispatch({
             type: NEW_REVIEW_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const checkReviewAvailability = (roomId : any) => async (dispatch: any) => {
+    try {
+
+        dispatch({type: REVIEW_AVAILABILITY_REQUEST});
+
+        const { data } = await axios.get(`/api/reviews/check_review_availability?roomId=${roomId}`);
+
+        dispatch({
+            type: REVIEW_AVAILABILITY_SUCCESS,
+            payload: data.isReviewAvailable
+        })
+    } catch (error: any) {
+        dispatch({
+            type: REVIEW_AVAILABILITY_FAIL,
             payload: error.response.data.message
         })
     }
