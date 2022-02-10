@@ -14,6 +14,7 @@ import { checkBooking, getBookedDates } from "../../redux/actions/bookingActions
 import { CHECK_BOOKING_RESET } from "../../redux/constants/bookingConstants";
 import getStripe from "../../utils/getStripe";
 import NewReview from "../review/NewReview";
+import ListReviews from "../review/ListReviews";
 
 const RoomDetails = ({ }: any) => {
     const dispatch = useDispatch();
@@ -203,29 +204,13 @@ const RoomDetails = ({ }: any) => {
 
                 <NewReview />
 
-                <div className="reviews w-75">
-                    <h3>Reviews:</h3>
-                    <hr />
-                    <div className="review-card my-3">
-                        <div className="rating-outer">
-                            <div className="rating-inner"></div>
-                        </div>
-                        <p className="review_user">by John</p>
-                        <p className="review_comment">Good Quality</p>
-
-                        <hr />
-                    </div>
-
-                    <div className="review-card my-3">
-                        <div className="rating-outer">
-                            <div className="rating-inner"></div>
-                        </div>
-                        <p className="review_user">by John</p>
-                        <p className="review_comment">Good Quality</p>
-
-                        <hr />
-                    </div>
-                </div>
+                {room.reviews && room.reviews.length > 0 ? (
+                    <ListReviews reviews={room.reviews} />
+                ) : (
+                    <p>
+                        <b>No Reviews in this room</b>
+                    </p>
+                )}
             </div>
         </>
     )

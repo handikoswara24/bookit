@@ -112,7 +112,7 @@ const createRoomReview = catchAsyncErrors(async (req: any, res: NextApiResponse)
         room.numOfReviews = room.reviews.length;
     }
 
-    room.ratings = room.reviews.reduce((acc : any, item : any) => item.rating + acc, 0) / room.reviews.length;
+    room.ratings = room.reviews.reduce((acc : any, item : any) => Number(item.rating) + acc, 0) / room.reviews.length;
 
     await room.save({ validateBeforeSave : false})
 
