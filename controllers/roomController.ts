@@ -4,6 +4,7 @@ import ErrorHandler from "../utils/errorHandler";
 import catchAsyncErrors from "../middlewares/catchAsyncErrors";
 import APIFeatures from "../utils/apiFeatures";
 import Booking from "../models/booking";
+import cloudinary from "cloudinary";
 
 const allRooms = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
     const resPerPage = 4;
@@ -25,13 +26,35 @@ const allRooms = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespon
     })
 })
 
-const newRoom = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
+const newRoom = catchAsyncErrors(async (req: any, res: NextApiResponse) => {
+    const images = req.body.images;
+
+    let imagesLinks = [];
+
+    for (let i = 0; i < images.length; i++) {
+
+        const result = await cloudinary.v2.uploader.upload(images[i], {
+            folder: 'bookit/rooms',
+            width: "150",
+            crop: "scale"
+        });
+
+        imagesLinks.push({
+            public_id: result.public_id,
+            url: result.secure_url
+        })
+
+    }
+
+    req.body.images = imagesLinks;
+    req.body.user = req.user._id
+
     const room = await Room.create(req.body);
 
     res.status(200).json({
         success: true,
         room
-    });
+    })
 })
 
 const getSingleRoom = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse, next: any) => {
