@@ -1,7 +1,13 @@
-import { ALL_ROOMS_FAIL, ALL_ROOMS_SUCCESS, CLEAR_ERRORS, NEW_REVIEW_FAIL, NEW_REVIEW_REQUEST, NEW_REVIEW_RESET, NEW_REVIEW_SUCCESS, REVIEW_AVAILABILITY_FAIL, REVIEW_AVAILABILITY_REQUEST, REVIEW_AVAILABILITY_SUCCESS, ROOM_DETAILS_FAIL, ROOM_DETAILS_SUCCESS } from "../constants/roomConstant";
+import { ADMIN_ROOMS_FAIL, ADMIN_ROOMS_REQUEST, ADMIN_ROOMS_SUCCESS, ALL_ROOMS_FAIL, ALL_ROOMS_SUCCESS, CLEAR_ERRORS, NEW_REVIEW_FAIL, NEW_REVIEW_REQUEST, NEW_REVIEW_RESET, NEW_REVIEW_SUCCESS, REVIEW_AVAILABILITY_FAIL, REVIEW_AVAILABILITY_REQUEST, REVIEW_AVAILABILITY_SUCCESS, ROOM_DETAILS_FAIL, ROOM_DETAILS_SUCCESS } from "../constants/roomConstant";
 
 export const allRoomsReducer = (state: any = { rooms: [] }, action: any) => {
     switch (action.type) {
+        case ADMIN_ROOMS_REQUEST: {
+            return {
+                loading: true
+            }
+        }
+
         case ALL_ROOMS_SUCCESS:
             return {
                 roomsCount: action.payload.roomsCount,
@@ -9,7 +15,15 @@ export const allRoomsReducer = (state: any = { rooms: [] }, action: any) => {
                 filteredRoomsCount: action.payload.filteredRoomsCount,
                 rooms: action.payload.rooms
             }
+
+        case ADMIN_ROOMS_SUCCESS: {
+            return {
+                loading : false,
+                rooms: action.payload
+            }
+        }
         case ALL_ROOMS_FAIL:
+        case ADMIN_ROOMS_FAIL : 
             return {
                 error: action.payload
             }

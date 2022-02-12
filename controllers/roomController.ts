@@ -141,11 +141,11 @@ const checkReviewAvailability = catchAsyncErrors(async (req: any, res: NextApiRe
 
 const allAdminRooms = catchAsyncErrors(async (req: any, res: NextApiResponse) => {
 
-    const room = await Room.find();
+    const rooms = await Room.find();
 
     res.status(200).json({
         success: true,
-        room
+        rooms
     });
 })
 
