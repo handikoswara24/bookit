@@ -87,11 +87,17 @@ const AllRooms = () => {
         <div className='container container-fluid'>
             {loading ? <Loader /> :
                 <>
-                    <h1 className='my-5'>{`${rooms && rooms.length} Rooms`}
-                        <Link href='/admin/rooms/new'>
-                            <a className="mt-0 btn text-white float-right new-room-btn">Create Room</a>
-                        </Link>
-                    </h1>
+                    <div className="d-flex flex-row justify-content-between">
+                        <h1 className='my-5'>{`${rooms && rooms.length} Rooms`}
+
+                        </h1>
+                        <div className="my-5">
+                            <Link href='/admin/rooms/new'>
+                                <a className="mt-0 btn text-white new-room-btn">Create Room</a>
+                            </Link>
+                        </div>
+                    </div>
+
                     <MDBDataTable
                         data={setRooms()}
                         className='px-3'
