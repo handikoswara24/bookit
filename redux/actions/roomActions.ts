@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ADMIN_ROOMS_FAIL, ADMIN_ROOMS_REQUEST, ADMIN_ROOMS_SUCCESS, ALL_ROOMS_FAIL, ALL_ROOMS_SUCCESS, CLEAR_ERRORS, NEW_REVIEW_FAIL, NEW_REVIEW_REQUEST, NEW_REVIEW_SUCCESS, NEW_ROOM_FAIL, NEW_ROOM_REQUEST, NEW_ROOM_SUCCESS, REVIEW_AVAILABILITY_FAIL, REVIEW_AVAILABILITY_REQUEST, REVIEW_AVAILABILITY_SUCCESS, ROOM_DETAILS_FAIL, ROOM_DETAILS_SUCCESS, UPDATE_ROOM_FAIL, UPDATE_ROOM_REQUEST, UPDATE_ROOM_SUCCESS } from "../constants/roomConstant";
+import { ADMIN_ROOMS_FAIL, ADMIN_ROOMS_REQUEST, ADMIN_ROOMS_SUCCESS, ALL_ROOMS_FAIL, ALL_ROOMS_SUCCESS, CLEAR_ERRORS, DELETE_ROOM_FAIL, DELETE_ROOM_REQUEST, DELETE_ROOM_SUCCESS, NEW_REVIEW_FAIL, NEW_REVIEW_REQUEST, NEW_REVIEW_SUCCESS, NEW_ROOM_FAIL, NEW_ROOM_REQUEST, NEW_ROOM_SUCCESS, REVIEW_AVAILABILITY_FAIL, REVIEW_AVAILABILITY_REQUEST, REVIEW_AVAILABILITY_SUCCESS, ROOM_DETAILS_FAIL, ROOM_DETAILS_SUCCESS, UPDATE_ROOM_FAIL, UPDATE_ROOM_REQUEST, UPDATE_ROOM_SUCCESS } from "../constants/roomConstant";
 import absoluteUrl from "next-absolute-url";
 // Get all rooms
 export const getRooms = (req: any, currentPage = 1, location ="", guests : any, category : any) => async (dispatch: any) => {
@@ -89,6 +89,25 @@ export const newReview = (reviewData : any) => async (dispatch: any) => {
     } catch (error: any) {
         dispatch({
             type: NEW_REVIEW_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const deleteRoom = (id : any) => async (dispatch: any) => {
+    try {
+
+        dispatch({type: DELETE_ROOM_REQUEST});
+
+        const { data } = await axios.delete(`/api/rooms/${id}`);
+
+        dispatch({
+            type: DELETE_ROOM_SUCCESS,
+            payload: data.success
+        })
+    } catch (error: any) {
+        dispatch({
+            type: DELETE_ROOM_FAIL,
             payload: error.response.data.message
         })
     }

@@ -115,13 +115,17 @@ const updateRoom = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResp
 })
 
 const deleteRoom = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
-    const room = await Room.findById(req.query.id)
+    const room = await Room.findById(req.query.id);
 
     if (!room) {
         return res.status(400).json({
             success: false,
             error: "Room not found with this ID"
         });
+    }
+
+    for(let i = 0; i < room.images.length; i++){
+        await cloudinary.v2.uploader.destroy(room.images[i].public_id);
     }
 
     await room.remove();

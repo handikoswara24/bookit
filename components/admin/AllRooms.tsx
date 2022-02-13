@@ -4,7 +4,8 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { clearErrors, getAdminRooms } from "../../redux/actions/roomActions";
+import { clearErrors, deleteRoom, getAdminRooms } from "../../redux/actions/roomActions";
+import { DELETE_ROOM_RESET } from "../../redux/constants/roomConstant";
 import Loader from "../layout/Loader";
 
 const AllRooms = () => {
@@ -14,6 +15,8 @@ const AllRooms = () => {
 
     const { loading, error, rooms } = useSelector((state: any) => state.allRooms);
 
+    const { error: deleteError, isDeleted } = useSelector((state: any) => state.updateRoom);
+
     useEffect(() => {
 
         dispatch(getAdminRooms());
@@ -22,7 +25,21 @@ const AllRooms = () => {
             toast.error(error);
             dispatch(clearErrors());
         }
-    }, [dispatch])
+
+        if (deleteError) {
+            toast.error(deleteError);
+            dispatch(clearErrors());
+        }
+
+        if (isDeleted) {
+            router.push("/admin/rooms");
+            dispatch({ type: DELETE_ROOM_RESET })
+        }
+    }, [dispatch, deleteError, isDeleted])
+
+    const deleteRoomHandler = (id: any) => {
+        dispatch(deleteRoom(id));
+    }
 
     const setRooms = () => {
         const data: any = {
@@ -71,7 +88,7 @@ const AllRooms = () => {
                             </a>
                         </Link>
 
-                        <button className="btn btn-danger mx-2" onClick={() => { }}>
+                        <button className="btn btn-danger mx-2" onClick={() => { deleteRoomHandler(room._id) }}>
                             <i className="fa fa-trash"></i>
                         </button>
 
