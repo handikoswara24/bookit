@@ -1,4 +1,4 @@
-import { ADMIN_ROOMS_FAIL, ADMIN_ROOMS_REQUEST, ADMIN_ROOMS_SUCCESS, ALL_ROOMS_FAIL, ALL_ROOMS_SUCCESS, CLEAR_ERRORS, NEW_REVIEW_FAIL, NEW_REVIEW_REQUEST, NEW_REVIEW_RESET, NEW_REVIEW_SUCCESS, NEW_ROOM_FAIL, NEW_ROOM_REQUEST, NEW_ROOM_RESET, NEW_ROOM_SUCCESS, REVIEW_AVAILABILITY_FAIL, REVIEW_AVAILABILITY_REQUEST, REVIEW_AVAILABILITY_SUCCESS, ROOM_DETAILS_FAIL, ROOM_DETAILS_SUCCESS } from "../constants/roomConstant";
+import { ADMIN_ROOMS_FAIL, ADMIN_ROOMS_REQUEST, ADMIN_ROOMS_SUCCESS, ALL_ROOMS_FAIL, ALL_ROOMS_SUCCESS, CLEAR_ERRORS, NEW_REVIEW_FAIL, NEW_REVIEW_REQUEST, NEW_REVIEW_RESET, NEW_REVIEW_SUCCESS, NEW_ROOM_FAIL, NEW_ROOM_REQUEST, NEW_ROOM_RESET, NEW_ROOM_SUCCESS, REVIEW_AVAILABILITY_FAIL, REVIEW_AVAILABILITY_REQUEST, REVIEW_AVAILABILITY_SUCCESS, ROOM_DETAILS_FAIL, ROOM_DETAILS_SUCCESS, UPDATE_ROOM_FAIL, UPDATE_ROOM_REQUEST, UPDATE_ROOM_RESET, UPDATE_ROOM_SUCCESS } from "../constants/roomConstant";
 
 export const allRoomsReducer = (state: any = { rooms: [] }, action: any) => {
     switch (action.type) {
@@ -104,6 +104,36 @@ export const newReviewReducer = (state: any = { }, action: any) => {
                 success: false
             }
         case NEW_REVIEW_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+        default:
+            return state;
+    }
+}
+
+export const updateRoomReducer = (state: any = { }, action: any) => {
+    switch (action.type) {
+        case UPDATE_ROOM_REQUEST:
+            return {
+                loading: true
+            }
+        case UPDATE_ROOM_SUCCESS:
+            return {
+                loading: false,
+                isUpdated: action.payload
+            }
+        case UPDATE_ROOM_RESET:
+            return {
+                isUpdated: false
+            }
+        case UPDATE_ROOM_FAIL:
             return {
                 loading: false,
                 error: action.payload
