@@ -3,6 +3,7 @@ import ErrorHandler from "../utils/errorHandler";
 import catchAsyncErrors from "../middlewares/catchAsyncErrors";
 import Moment from "moment";
 import { extendMoment } from "moment-range";
+import { nextTick } from "process";
 
 //@ts-ignore
 const moment = extendMoment(Moment);
@@ -133,11 +134,27 @@ const allAdminBookings = catchAsyncErrors(async (req, res) => {
     })
 });
 
+const deleteBooking = catchAsyncErrors(async (req, res, next) => {
+
+    const booking =  await Booking.findById(req.query.id);
+
+    if(!booking){
+        return next(new ErrorHandler("Booking not found with this ID", 404))
+    }
+
+    await booking.remove();
+
+    res.status(200).json({
+        success: true
+    })
+});
+
 export {
     newBooking,
     checkRoomBookingAvailability,
     checkBookedDatesOfRoom,
     myBookings,
     getBookingDetails,
-    allAdminBookings
+    allAdminBookings,
+    deleteBooking
 }

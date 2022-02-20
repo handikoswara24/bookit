@@ -1,4 +1,4 @@
-import { ADMIN_BOOKINGS_FAIL, ADMIN_BOOKINGS_REQUEST, ADMIN_BOOKINGS_SUCCESS, BOOKING_DETAILS_FAIL, BOOKING_DETAILS_SUCCESS, BOOK_DATES_FAIL, BOOK_DATES_SUCCESS, CHECK_BOOKING_FAIL, CHECK_BOOKING_REQUEST, CHECK_BOOKING_RESET, CHECK_BOOKING_SUCCESS, CLEAR_ERRORS, MY_BOOKINGS_FAIL, MY_BOOKINGS_SUCCESS } from "../constants/bookingConstants"
+import { ADMIN_BOOKINGS_FAIL, ADMIN_BOOKINGS_REQUEST, ADMIN_BOOKINGS_SUCCESS, BOOKING_DETAILS_FAIL, BOOKING_DETAILS_SUCCESS, BOOK_DATES_FAIL, BOOK_DATES_SUCCESS, CHECK_BOOKING_FAIL, CHECK_BOOKING_REQUEST, CHECK_BOOKING_RESET, CHECK_BOOKING_SUCCESS, CLEAR_ERRORS, DELETE_BOOKING_FAIL, DELETE_BOOKING_REQUEST, DELETE_BOOKING_RESET, DELETE_BOOKING_SUCCESS, MY_BOOKINGS_FAIL, MY_BOOKINGS_SUCCESS } from "../constants/bookingConstants"
 
 export const checkBookingReducer = (state: any = { available: null }, action: any) => {
     switch (action.type) {
@@ -109,6 +109,37 @@ export const bookingDetailsReducer = (state: any = { booking: {} }, action: any)
                 booking: action.payload
             }
         case BOOKING_DETAILS_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+        default:
+            return state;
+    }
+}
+
+export const bookingReducer = (state: any = { }, action: any) => {
+    switch (action.type) {
+        case DELETE_BOOKING_REQUEST:
+            return {
+                loading: true
+            }
+        case DELETE_BOOKING_SUCCESS:
+            return {
+                loading: false,
+                isDeleted: action.payload
+            }
+        case DELETE_BOOKING_RESET:
+            return {
+                loading: false,
+                isDeleted: null
+            }
+        case DELETE_BOOKING_FAIL:
             return {
                 loading: false,
                 error: action.payload
