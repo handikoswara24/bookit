@@ -54,7 +54,7 @@ const Home = () => {
                     <a className="ml-2 back-to-search"><i className='fa fa-arrow-left'></i> Back to Search</a>
                 </Link>
                 <div className="row">
-                    {rooms.length === 0 ?
+                    {rooms == null || rooms.length === 0 ?
                         (<div>
                             <div className="alert alert-danger mt-5 w-100">
                                 <b>No Rooms.</b>

@@ -126,7 +126,15 @@ const getBookingDetails = catchAsyncErrors(async (req, res) => {
 
 const allAdminBookings = catchAsyncErrors(async (req, res) => {
 
-    const bookings =  await Booking.find();
+    const bookings =  await Booking.find()
+                        .populate({
+                            path: "room",
+                            select: "name pricePerNight images"
+                        })
+                        .populate({
+                            path: "user",
+                            select: "name email"
+                        });
 
     res.status(200).json({
         success: true,
@@ -136,7 +144,15 @@ const allAdminBookings = catchAsyncErrors(async (req, res) => {
 
 const deleteBooking = catchAsyncErrors(async (req, res, next) => {
 
-    const booking =  await Booking.findById(req.query.id);
+    const booking =  await Booking.findById(req.query.id)
+                        .populate({
+                            path: "room",
+                            select: "name pricePerNight images"
+                        })
+                        .populate({
+                            path: "user",
+                            select: "name email"
+                        });
 
     if(!booking){
         return next(new ErrorHandler("Booking not found with this ID", 404))
