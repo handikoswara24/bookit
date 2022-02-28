@@ -199,6 +199,41 @@ const allAdminRooms = catchAsyncErrors(async (req: any, res: NextApiResponse) =>
     });
 })
 
+const getRoomReviews = catchAsyncErrors(async (req: any, res: NextApiResponse) => {
+
+    const room = await Room.findById(req.query.id);
+
+    res.status(200).json({
+        success: true,
+        reviews: room.reviews
+    });
+})
+
+const deleteReview = catchAsyncErrors(async (req: any, res: NextApiResponse) => {
+
+    const room = await Room.findById(req.query.roomId);
+
+    const reviews = room.reviews.filter((review : any) => review._id.toString() !== req.query.id.toString());
+    const numOfReviews = reviews.length;
+
+    const ratings = room.reviews.reduce((acc : any, item : any) => item.rating + acc, 0) / reviews.length
+
+    await Room.findByIdAndUpdate(req.query.roomId, {
+        reviews,
+        ratings,
+        numOfReviews
+    }, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+
+    res.status(200).json({
+        success: true
+    })
+
+})
+
 export {
     allRooms,
     newRoom,
@@ -207,5 +242,7 @@ export {
     deleteRoom,
     createRoomReview,
     checkReviewAvailability,
-    allAdminRooms
+    allAdminRooms,
+    getRoomReviews,
+    deleteReview
 }
