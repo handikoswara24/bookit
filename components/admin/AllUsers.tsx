@@ -8,7 +8,8 @@ import Loader from '../layout/Loader'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify';
 
-import { getAdminUsers, clearErrors } from '../../redux/actions/userActions'
+import { getAdminUsers, clearErrors, deleteUser } from '../../redux/actions/userActions'
+import { DELETE_USER_RESET } from '../../redux/constants/userConstant'
 
 const AllUsers = () => {
 
@@ -16,7 +17,7 @@ const AllUsers = () => {
     const router = useRouter()
 
     const { loading, error, users } = useSelector((state: any) => state.allUsers)
-    //const { error: deleteError, isDeleted } = useSelector((state : any) => state.user)
+    const { error: deleteError, isDeleted } = useSelector((state: any) => state.user)
 
     useEffect(() => {
 
@@ -27,17 +28,17 @@ const AllUsers = () => {
             dispatch(clearErrors())
         }
 
-        // if (deleteError) {
-        //     toast.error(deleteError);
-        //     dispatch(clearErrors())
-        // }
+        if (deleteError) {
+            toast.error(deleteError);
+            dispatch(clearErrors())
+        }
 
-        // if (isDeleted) {
-        //     router.push('/admin/users')
-        //     dispatch({ type: DELETE_USER_RESET })
-        // }
+        if (isDeleted) {
+            router.push('/admin/users')
+            dispatch({ type: DELETE_USER_RESET })
+        }
 
-    }, [dispatch, error])
+    }, [dispatch, error, isDeleted])
 
 
     const setUsers = () => {
@@ -100,7 +101,7 @@ const AllUsers = () => {
     }
 
     const deleteUserHandler = (id: any) => {
-        // dispatch(deleteUser(id))
+        dispatch(deleteUser(id))
     }
 
 

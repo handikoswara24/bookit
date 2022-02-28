@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ADMIN_DETAILS_FAIL, ADMIN_DETAILS_REQUEST, ADMIN_DETAILS_SUCCESS, ADMIN_USERS_FAIL, ADMIN_USERS_REQUEST, ADMIN_USERS_SUCCESS, CLEAR_ERRORS, FORGOT_PASSWORD_FAIL, FORGOT_PASSWORD_REQUEST, FORGOT_PASSWORD_SUCCESS, LOAD_USER_FAIL, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, REGISTER_USER_FAIL, REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS, RESET_PASSWORD_FAIL, RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, UPDATE_PROFILE_FAIL, UPDATE_PROFILE_REQUEST, UPDATE_PROFILE_SUCCESS, UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS } from "../constants/userConstant";
+import { ADMIN_DETAILS_FAIL, ADMIN_DETAILS_REQUEST, ADMIN_DETAILS_SUCCESS, ADMIN_USERS_FAIL, ADMIN_USERS_REQUEST, ADMIN_USERS_SUCCESS, CLEAR_ERRORS, DELETE_USER_FAIL, DELETE_USER_REQUEST, DELETE_USER_SUCCESS, FORGOT_PASSWORD_FAIL, FORGOT_PASSWORD_REQUEST, FORGOT_PASSWORD_SUCCESS, LOAD_USER_FAIL, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, REGISTER_USER_FAIL, REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS, RESET_PASSWORD_FAIL, RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, UPDATE_PROFILE_FAIL, UPDATE_PROFILE_REQUEST, UPDATE_PROFILE_SUCCESS, UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS } from "../constants/userConstant";
 
 export const registerUser = (userData: any) => async (dispatch: any) => {
     try {
@@ -124,6 +124,18 @@ export const updateUser = (id: any, userData: any) => async (dispatch: any) => {
         dispatch( {type: UPDATE_USER_SUCCESS, payload: data.success } );
     } catch (error : any) {
         dispatch({type: RESET_PASSWORD_FAIL, payload: error.response.data.message});
+    }
+} 
+
+export const deleteUser = (id : any) => async (dispatch: any) => {
+    try {
+        dispatch({type: DELETE_USER_REQUEST});
+
+        const { data } : any = await axios.delete(`/api/admin/users/${id}`);
+
+        dispatch( {type: DELETE_USER_SUCCESS, payload: data.success } );
+    } catch (error : any) {
+        dispatch({type: DELETE_USER_FAIL, payload: error.response.data.message});
     }
 } 
 

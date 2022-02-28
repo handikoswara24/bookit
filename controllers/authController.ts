@@ -196,6 +196,24 @@ const updateUser = catchAsyncErrors(async (req: any, res: NextApiResponse, next:
     })
 })
 
+const deleteUser = catchAsyncErrors(async (req: any, res: NextApiResponse, next: any) => {
+    const user = await User.findById(req.query.id);
+
+    if(!user){
+        return next(new ErrorHandler("User not found with this ID.", 400));
+    }
+
+    const image_id = user.avatar.public_id;
+    await cloudinary.v2.uploader.destroy(image_id);
+
+    await user.remove();
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+})
+
 export {
     registerUser,
     currentUserProfile,
@@ -204,5 +222,6 @@ export {
     resetPassword,
     getAdminUsers,
     getUserDetails,
-    updateUser
+    updateUser,
+    deleteUser
 }
