@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next"
+import next, { NextApiRequest, NextApiResponse } from "next"
 import User from "../models/user";
 import catchAsyncErrors from "../middlewares/catchAsyncErrors";
 import cloudinary from "cloudinary";
@@ -154,10 +154,55 @@ const resetPassword = catchAsyncErrors(async (req: any, res: NextApiResponse, ne
 
 })
 
+const getAdminUsers = catchAsyncErrors(async (req: any, res: NextApiResponse) => {
+    const users = await User.find();
+
+    res.status(200).json({
+        success: true,
+        users
+    })
+})
+
+const getUserDetails = catchAsyncErrors(async (req: any, res: NextApiResponse, next: any) => {
+    const user = await User.findById(req.query.id);
+
+    if(!user){
+        return next(new ErrorHandler("User not found with this ID.", 400));
+    }
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+})
+
+const updateUser = catchAsyncErrors(async (req: any, res: NextApiResponse, next: any) => {
+
+    const newUserData = {
+        name: req.body.name,
+        email: req.body.email,
+        role: req.body.role
+    }
+
+    const user = await User.findByIdAndUpdate(req.query.id, newUserData, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    });
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+})
+
 export {
     registerUser,
     currentUserProfile,
     updateProfile,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    getAdminUsers,
+    getUserDetails,
+    updateUser
 }

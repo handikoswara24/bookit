@@ -18,7 +18,8 @@ const BookingDetailsPage = () => {
 export const getServerSideProps = wrapper.getServerSideProps(store => async ({ req, params }: any) => {
     const session = await getSession({ req });
 
-    if (!session) {
+    //@ts-ignore
+    if (!session || session.user.role != "admin") {
         return {
             redirect: {
                 destination: "/login",
